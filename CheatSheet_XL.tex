@@ -213,6 +213,17 @@ version={4.0},]{doclicense}
 		\end{verbatim}
 	\end{minipage}
 	
+	\section{Useful Console commands}
+	\begin{itemize}
+		\item \textbf{ShowCollision:} Show collision components in game.
+		\item \textbf{ToggleDebugCamera:} Switch to a separate camera, which you can move in world freely and shows some additional debug infos.
+		\item \textbf{HighResShot [number]:} Makes a screen shot with [number] times your normal screen resolution. Instead of [number] you can provide a resolution the screenshot should have.
+		\item \textbf{[CVar] ?:} Add a ? after a CVar name and a description about the CVar will be shown.
+		\item \textbf{DumpConsoleCommands:} Prints a list of all available console commands and CVars.
+		\item \textbf{slowmo [float]:} Slow down or speed up the game. slowmo 1.0 is default. slowmo 1.5 is faster than normal, slowmo 0.5 is slower.
+		\item \textbf {open [mapname]:} Load and opens the map with the given name.
+	\end{itemize}
+	
 \end{multicols*}
 	
 	\pagebreak
@@ -269,12 +280,16 @@ version={4.0},]{doclicense}
 			//Only one 3 can be added to mySet
 			\end{verbatim}
 		\item \textbf{TSubclassOf:} When you define a UProperty with the type TSubclassOf{\textless}UMyObject{\textgreater}, the editor allows you only to select classes, which are derived from UMyObject.
+			\begin{verbatim}
+				UPROPERTY(EditAnywhere)
+				TSubclassOf<AActor> ActorType;
+			\end{verbatim}
 		\item \textbf{FName:} FNames provide a fast possibility to reference to things via a name. FNames are case-insensitive and can not be manipulated (they are immutable).
 		\item \textbf{FText:} FText represents a string that can be displayed to user. It has a built in system for localization (so FTexts can be translated) and are immutable.
 		\item \textbf{FString:} FString is the only class that allows manipulation. FStrings can be searched modified and compared, but this makes FStrings less performant than FText or FName.
 	\end{itemize}
 
-	\subsection{Useful Functions}
+	\subsection{Useful Functions and snippets}
 	\begin{itemize}
 			\item \textbf{UE\_LOG():} This functions allows to print message to the UE Log or the Output Log in the Editor. You can set a category (you can use LogTemp for temporal usage) and verbosity (like Error, Warning or Display). If you want to output a variable, you can use printf syntax.  Usage Example:
 			\begin{verbatim}
@@ -314,11 +329,27 @@ version={4.0},]{doclicense}
 				if(Actor != nullptr) {
 				/* do something */ }
 			\end{verbatim}
+			\item \textbf{Console Variables:} To define a variable that can be changed via editor (CVar), you can use TAutoConsoleVariable in any C++ file:
+			\begin{verbatim}
+				static TAutoConsoleVariable<int32> CVarMyVar(
+				TEXT("r.MyVar"),
+				2,	//Default value
+				TEXT("CVar Description\n")
+				TEXT("  1: Infos about possible values \n"),
+				ECVF_Scalability | ECVF_RenderThreadSafe);
+			\end{verbatim}
+			The last parameter are some flags, that defines the behavior of the CVar. When you add ECVF\_Cheat flag, the CVar can be only changed in cheat mode. If you want to access the CVar's value in C++, then use this:
+			\begin{verbatim}
+			// only needed if you are not in the same cpp file
+			extern TAutoConsoleVariable<int32> CVarMyVar;
+			// Retrieve the MyVar value via Game Thread
+			int32 MyVar = CVarMyVar.GetValueOnGameThread();
+			\end{verbatim}
 	\end{itemize}
 
-	\subsection{Assertations}
-	Assertations can be used to ensure that specific conditions are fulfilled, before continue in the program flow. If the checks are not successful, the execution is halted. Assertations will only work when the \verb|DO_CHECK| macro is set (and not zero) during compiling.
-	There are different types of assertations:
+	\subsection{Assertions}
+	Assertions can be used to ensure that specific conditions are fulfilled, before continue in the program flow. If the checks are not successful, the execution is halted. Assertions will only work when the \verb|DO_CHECK| macro is set (and not zero) during compiling.
+	There are different types of assertions:
 	\begin{itemize}
 		\item \textbf{check():} If the expression inside check() is false, the execution will be halted. The expression is only evaluated, when \verb|DO_CHECK| is set. If you need that the expression is always evaluated, then use verify().
 			\begin{verbatim}
@@ -335,13 +366,42 @@ version={4.0},]{doclicense}
 				        checkNoEntry();
 				}
 			\end{verbatim}
-		\item \textbf{unimplemented():} Use this assertations, on functions that are yet unimplemented or must be overriden to work properly.
+		\item \textbf{unimplemented():} Use this assertions, on functions that are yet unimplemented or must be overridden to work properly.
 			\begin{verbatim}
 				void Function() {
 				    //This func must be overriden to work
 				    unimplemented();   
 				}
 			\end{verbatim}
+	\end{itemize}
+
+	\subsection{Draw Debug Functions}
+	To use the following functions you need to include \verb|DrawDebugHelpers.h|.
+	\begin{itemize}
+		\item \textbf{DrawDebugPoint():} Draw a point in the world at a given location. You can choose Color and size of the point:
+		\begin{verbatim}
+		DrawDebugPoint(
+		   GetWorld(), 
+		   MyLocation, //The location as FVector
+		   20,  //size of the point
+		   FColor(255,0,0),  //the color
+		   false, //Not persistant
+		   10.f //10s lifetime
+		);
+		\end{verbatim}
+		\item \textbf{DrawDebugLine():} Draw a line between to points in  the world:
+		\begin{verbatim}
+			DrawDebugLine(
+			   GetWorld(), 
+			   Start, //Start point
+			   End,  //End point
+			   FColor(0,255,0), //Line Color 
+			   false, //Not persistant
+			   -1, //Infinite lifetime
+			   0,
+			   10 //Line Thickness
+			);
+		\end{verbatim}
 	\end{itemize}
 	
 	\doclicenseImage
