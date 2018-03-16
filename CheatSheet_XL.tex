@@ -237,11 +237,37 @@ version={4.0},]{doclicense}
 	\begin{itemize}
 		\item \textbf{TArray:} The mostly used container in UE4. The objects in it have a well-defined order, and functions are provided to create, get, modify or sort the elements. Similar to C++'s std::vector. You can iterate over the element like this:
 		\begin{verbatim}
+			TArray<AActor> ActorArray;
+			//Add MyActor 3 times
+			ActorArray.Init(MyActor, 3);
+			ActorArray.Add(AnotherActor);
+			//Retrieve the first Actor from array
+			auto FirstActor = ActorArray[0]
+			//Iterate over all Actor in Array
 			for (AActor* Actor : ActorArray) {
-				Actor->SomeFunc(); }
+			    Actor->SomeFunc(); 
+			}
 		\end{verbatim}
 		\item \textbf{TMap:} A container, where every element has a key (of any type), via which you identify every element. Similar to std::map
+		\begin{verbatim}
+			TMap<int32, FString> StringMap;
+			StringMap.Add(4, TEXT("Foo");
+			StringMap.Add(-1, TEXT("Bar");
+			//Iterate over all Pairs
+			for (auto& pair : StringMap)
+			{
+			    pair.Key; //Gets the key of the pair
+			    *pair.Value; //Gets the value of pair
+			}
+		\end{verbatim}
 		\item \textbf{TSet:} A (fast) container to store unique elements without order. Similar to C++'s std::Set
+			\begin{verbatim}
+			TSet<int32> mySet;
+			mySet.Add(3); //mySet = [3]
+			mySet.Add(5); //mySet = [3,5]
+			mySet.Add(3); //mySet = [3,5]
+			//Only one 3 can be added to mySet
+			\end{verbatim}
 		\item \textbf{TSubclassOf:} When you define a UProperty with the type TSubclassOf{\textless}UMyObject{\textgreater}, the editor allows you only to select classes, which are derived from UMyObject.
 		\item \textbf{FName:} FNames provide a fast possibility to reference to things via a name. FNames are case-insensitive and can not be manipulated (they are immutable).
 		\item \textbf{FText:} FText represents a string that can be displayed to user. It has a built in system for localization (so FTexts can be translated) and are immutable.
