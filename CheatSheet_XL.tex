@@ -196,9 +196,28 @@ version={4.0},]{doclicense}
 \end{minipage}
 
 	
-
+	\subsection{USTRUCT()}
 	
+	\begin{tabularx}{\columnwidth}{|p{3.5cm}|X|}
+		\hline \textbf{BlueprintType}
+		& Structs with this attribute can be used as type inside Blueprints. Make and Break nodes get automatically generated.\\
+		\hline
+	\end{tabularx}
 	
+	\begin{minipage}{\columnwidth}
+		\begin{verbatim}
+			USTRUCT(BlueprintType)
+			struct MyStruct {
+			// ...
+			}	
+		\end{verbatim}
+	\end{minipage}
+	
+\end{multicols*}
+	
+	\pagebreak
+	
+\begin{multicols*}{2}
 	\section{Classes and Functions}
 
 	\subsection{Base Gameplay Classes}
@@ -270,7 +289,34 @@ version={4.0},]{doclicense}
 				/* do something */ }
 			\end{verbatim}
 	\end{itemize}
-	
+
+	\subsection{Assertations}
+	Assertations can be used to ensure that specific conditions are fulfilled, before continue in the program flow. If the checks are not successful, the execution is halted. Assertations will only work when the \verb|DO_CHECK| macro is set (and not zero) during compiling.
+	There are different types of assertations:
+	\begin{itemize}
+		\item \textbf{check():} If the expression inside check() is false, the execution will be halted. The expression is only evaluated, when \verb|DO_CHECK| is set. If you need that the expression is always evaluated, then use verify().
+			\begin{verbatim}
+				check(OneProperty == 1);
+				verify(ImportantCall() != nullptr);
+			\end{verbatim}
+		\item \textbf{checkf():} Behaves like check(), but additional debug info is printed. verifyf() works analogous.
+		\item \textbf{checkNoEntry():} You can mark code path that should never be executed with this assertion. If it is still be called, the execution is halted.
+			\begin{verbatim}
+				switch(Property) {
+				    case EEnum:Val1:
+				        return 1;
+				    default:
+				        checkNoEntry();
+				}
+			\end{verbatim}
+		\item \textbf{unimplemented():} Use this assertations, on functions that are yet unimplemented or must be overriden to work properly.
+			\begin{verbatim}
+				void Function() {
+				    //This func must be overriden to work
+				    unimplemented();   
+				}
+			\end{verbatim}
+	\end{itemize}
 	
 	\doclicenseImage
 \end{multicols*}
