@@ -15,4 +15,6 @@ The "XL" Version (4 pages) has all content of the normal version and additional 
 
 If you has any improvements or ideas, feel free to send a pull request or send me a message.
 
+## License
+
 Licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0). See LICENSE.md for more info.
