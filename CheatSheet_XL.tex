@@ -1,0 +1,278 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{multicol}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage[
+type={CC},
+modifier={by-nc-sa},
+version={4.0},]{doclicense}
+\usepackage[left=0.5cm,right=0.5cm,top=1cm,bottom=1.5cm]{geometry}
+
+\begin{document}
+\begin{multicols*}{2}
+	
+	%\maketitle
+	\begin{center}
+		\Huge{Unreal Engine 4 C++ Cheat Sheet XL}
+		\linebreak
+		\Large{(C) J. Böhmer, March 2018  \linebreak Licensed under CC BY-NC-SA 4.0}
+		\linebreak
+		\Large{Version 1.0}
+	\end{center}
+	
+	\section{Reflection System}
+	
+	\subsection{UFUNCTION()}
+	
+	\begin{tabularx}{\columnwidth}{|p{4.1cm}|X|}
+		
+		\hline \textbf{BlueprintAuthorityOnly}
+		& This function will not execute from Blueprint code if running on something without network authority \\
+		\hline \textbf{BlueprintCosmetic}
+		& This function is cosmetic-only and will not run on dedicated servers \\
+		\hline \textbf{Blueprint-ImplementableEvent}
+		& This function is designed to be overriden by a blueprint. Dont provide a body for this function in C++. \\
+		\hline \textbf{BlueprintNativeEvent}
+		& This function is designed to be overriden by a blueprint, but also has a native implementation. Provide a body named [FunctionName]\_Implementation \\
+		\hline \textbf{BlueprintPure}
+		& This function has no side effects on the object. Useful for "Get" functions. Implies BlueprintCallable \\
+		\hline \textbf{BlueprintCallable}
+		& This function can be called from Blueprints and/or C++. \\
+		\hline \textbf{Category}
+		& Specifies the category of the function within the Editor. Supports sub-categories separated by "$\vert$" \\
+		\hline \textbf{Exec}
+		& This function is callable from the Console CLI. \\	
+		\hline \textbf{AdvancedDisplay (Meta)}
+		& List parameter names seperated by commas. Every parameter in this list will appear as advanced pins in Blueprint Editor. \\
+		\hline \textbf{DevelopmentOnly (Meta)}
+		& Functions marked like this, will only run in Development builds and not in shipping builds. This is useful for things like Debug Output\\
+		\hline \textbf{BlueprintProtected (Meta)}
+		& This function can only be called on the owning object in a Blueprint not on any other instances. \\
+		\hline
+		
+	\end{tabularx}
+	
+	%\textbf{Usage example:}
+	\begin{verbatim}
+	UFUNCTION(Exec)
+	void ConsoleCommand(float param);
+	UFUNCTION(BlueprintPure)
+	static FRotator MakeRotator(flat f);
+	UFUNCTION(BlueprintImplementableEvent)
+	void ImportantEvent(int param);
+	UFUNCTION(meta=(DevelopmentOnly))
+	float NotSoImportantDebugFunc();
+	\end{verbatim}
+	
+	
+	\subsection{UENUM()}
+	
+	\begin{tabularx}{\columnwidth}{|l|X|}
+		\hline \textbf{BlueprintType}
+		& Enums marked with this attribute, can be used from within Blueprints. \\
+		\hline \textbf{Bitflags (Meta)}
+		& Enums marked with this attribute, can be used as BitMask in UPROPERTYs. \\
+		\hline \textbf{DisplayName (UMETA)}
+		& Use this inside of an Enum, to override the name displayed inside the Editor. See usage below: \\
+		\hline
+	\end{tabularx}
+	
+	\begin{minipage}{\columnwidth}
+	\begin{verbatim}
+		//Note that enums must be declared before any class
+		UENUM(BlueprintType)
+		enum class ETestEnum {
+		    FirstEntry UMETA(DisplayName="OtherName"), 
+		    //...
+		}
+		UENUM(meta=(Bitflags))
+		enum class EMyEnum {
+			FirstBit,
+			SecondBit
+		}
+	\end{verbatim} 
+	\end{minipage}
+
+	\subsection{UPARAM()}
+	\begin{tabularx}{\columnwidth}{|l|X|}
+			\hline \textbf{ref}
+			& By default, when you pass an reference to a Blueprint callable function, it will appear as an output node in the Editor. Use this attribute, to mark it as an input.\\
+			\hline \textbf{DisplayName}
+			& Use this name to override the name under which the parameter appears in the Blueprint Editor \\
+			\hline
+	\end{tabularx}
+	
+	\begin{minipage}{\columnwidth}
+		\begin{verbatim}
+			UFUNCTION(BlueprintCallable)
+			void MyFunc(UPARAM(ref) TArray<int>* IntArray);
+			UFUNCTION(BlueprintCallable)
+			void OtherFunc(UPARAM(DisplayName="Name" float f);
+		\end{verbatim}
+	\end{minipage}
+	
+	\subsection{UCLASS()}
+	\begin{tabularx}{\columnwidth}{|l|X|}
+		\hline \textbf{Abstract}
+		& An class that is marked as abstract can not be placed or instanced during runtime. This is especially useful for classes, that does not provide functionality on their own and must be inherited and modified for meaningful usage.\\
+		\hline \textbf{Blueprintable}
+		& Classes marked with this attribute can be used as a base class for creating Blueprints. On Default this is deactivated. The attribute is inherited by child classes, use NotBlueprintable on childs to disable this. \\
+		\hline \textbf{BlueprintType}
+		& Classes with this attribute can be used as variable type in Blueprints. \\
+		\hline \textbf{Placeable}
+		& Classes marked as Placable, can be created and placed in a level, UI Scene or Blueprint via the Editor. The flag is inherited by all child classes, use NotPlacable on child to disable this. \\
+		\hline
+	\end{tabularx}
+	
+	\begin{verbatim}
+	UCLASS(Blueprintable)
+	class MyClass : public UObject {
+	//Class code ...
+	}
+	\end{verbatim}
+	
+	\subsection{UPROPERTY()}
+	
+	\begin{tabularx}{\columnwidth}{|p{3.5cm}|X|}
+		
+		\hline \textbf{BlueprintAssignable}
+		&  Multicast Delegates only. Exposes property for assigning in Blueprints  \\
+		\hline \textbf{BlueprintCallable}
+		&   Multicast Delegates only. Property property for calling in Blueprints \\
+		\hline \textbf{BlueprintReadOnly}
+		& This property can be read by blueprints, but not modified \\ 
+		\hline \textbf{BlueprintReadWrite}
+		&  This property can be read or written from a blueprint \\
+		\hline \textbf{Category} 
+		& Specifies the category of the property within the Editor. Supports sub-categories separated by "$\vert$" \\ 
+		\hline \textbf{EditAnywhere}
+		&  Indicates that this property can be edited via property windows, archetypes and instances within the Editor \\ 
+		\hline \textbf{EditDefaultsOnly}
+		& Indicates that this property can be edited by property windows, but only on archetypes. This operator is incompatible with the Visible* specifiers \\ 
+		\hline \textbf{EditFixedSize}
+		& Indicates that elements of an array can be modified in Editor, but its size cannot be changed \\ 
+		\hline \textbf{EditInstanceOnly}
+		&  Indicates that this property can be edited by property windows, but only on instances, not on archetypes \\ 
+		\hline \textbf{Transient}
+		& Property is transient: shouldn't be saved, zero-filled at load time \\ 
+		\hline \textbf{VisibleAnywhere}
+		& Indicates that this property is visible in property windows, but cannot be edited at all \\ 
+		\hline \textbf{VisibleDefaultsOnly}
+		& Indicates that this property is only visible in property windows for archetypes, and cannot be edited \\ 
+		\hline \textbf{VisibleInstanceOnly}
+		& Indicates that this property is only visible in property windows for instances, not for archetypes, and cannot be edited \\ 
+		\hline \textbf{AdvancedDisplay}
+		& Moves the property into the Advanced dropdown in the Details panel within the Editor \\
+		\hline \textbf{NoClear}
+		& Hides the clear and browse button in the editor for this property. \\
+		\hline \textbf{EditCondition (Meta)}
+		&  The property can only be edited in Editor if the specified bool Property is true. Use ! to invert logic (so you can only edit property if bool is false). \\
+		\hline \textbf{BitMask (meta)}
+		& Change the value of this property in the Editor using a BitMask, which means you can select the value of each single bits. Use BitMask to specify a Enum, which entries will be used to name each bit. \\
+		\hline \textbf{ClampMax / ClampMin (Meta)}
+		& Use this on float or int property, to specify a maximum/minimum, that can be entered for this property in the Editor \\
+		\hline \textbf {MakeEditWidget (Meta)}
+		& Use this on a Transform or Rotator property, and the property value can be changed using a widget inside the editor viewport. \\
+		\hline
+	\end{tabularx}
+
+	%Usage example:
+	\begin{minipage}{\columnwidth}
+	\begin{verbatim}
+		UPROPERTY(EditAnywhere, Category="Category|Sub")
+		bool BoolProperty;
+		UPROPERTY(BlueprintReadOnly, AdvancedDisplay)
+		TSubclassOf<UStaticMesh> AdvancedMeshClass;
+		UPROPERTY(meta=(EditCondition="BoolProperty"))
+		uint16 ConditionalInt;
+		UPROPERTY(meta=(BitMask, BitMaskEnum="EMyEnum"))
+		int32 BitFlags;
+		UPROPERTY(meta=(ClampMin="3", ClampMax="4"))
+		float myFloat;
+	\end{verbatim}
+\end{minipage}
+
+	
+
+	
+	
+	\section{Classes and Functions}
+
+	\subsection{Base Gameplay Classes}
+	
+	\begin{itemize}
+		\item \textbf{UObject:} The base class, all classes, that should be used within C++ must extend. The name of child classes should start with U (e.g. UMyNewClass).
+		\item \textbf{AActor:} Actor is the base class for all objects, that can be placed in a level. An Actor can has various Components. Child classes should start with A (e.g AMyNewActor).
+		\item \textbf{APawn:} The base class, for all actors, that should be controled by players or AI.
+		\item \textbf{ACharacter:} Characters are Pawn, which has a mesh collision and movement logic. They represent physical characters in the game world and can use CharacterMovementComponent for walking, flying, jumping and swiming logic.
+		\item \textbf{UActorComponent:} The base class for all actor components. Components defines some reusable behavior, that can be added to different actors.
+		\item \textbf{USceneComponent:} An Actor Component, which has a transform (position and rotation) and support for attachements.
+		\item \textbf{UPrimitiveComponent:} A SceneComponent which can show some kind of geometry, usable for rendering and/or collision. Examples for this type are \emph{StaticMeshComponent}, \emph{SkeletalMeshComponent}, or the \emph{ShapeComponent}s.
+		
+	\end{itemize}
+	
+	\subsection{Datastructures and Helpers}
+	\begin{itemize}
+		\item \textbf{TArray:} The mostly used container in UE4. The objects in it have a well-defined order, and functions are provided to create, get, modify or sort the elements. Similar to C++'s std::vector. You can iterate over the element like this:
+		\begin{verbatim}
+			for (AActor* Actor : ActorArray) {
+				Actor->SomeFunc(); }
+		\end{verbatim}
+		\item \textbf{TMap:} A container, where every element has a key (of any type), via which you identify every element. Similar to std::map
+		\item \textbf{TSet:} A (fast) container to store unique elements without order. Similar to C++'s std::Set
+		\item \textbf{TSubclassOf:} When you define a UProperty with the type TSubclassOf{\textless}UMyObject{\textgreater}, the editor allows you only to select classes, which are derived from UMyObject.
+		\item \textbf{FName:} FNames provide a fast possibility to reference to things via a name. FNames are case-insensitive and can not be manipulated (they are immutable).
+		\item \textbf{FText:} FText represents a string that can be displayed to user. It has a built in system for localization (so FTexts can be translated) and are immutable.
+		\item \textbf{FString:} FString is the only class that allows manipulation. FStrings can be searched modified and compared, but this makes FStrings less performant than FText or FName.
+	\end{itemize}
+
+	\subsection{Useful Functions}
+	\begin{itemize}
+			\item \textbf{UE\_LOG():} This functions allows to print message to the UE Log or the Output Log in the Editor. You can set a category (you can use LogTemp for temporal usage) and verbosity (like Error, Warning or Display). If you want to output a variable, you can use printf syntax.  Usage Example:
+			\begin{verbatim}
+			//Print Test to console
+			UE_LOG(LogTemp, Warning, TEXT("Test"));
+			//Print the value of int n and a string
+			UE_LOG(LogTemp, Display, TEXT("n=%d"), n);
+			UE_LOG(LogTemp, Error, TEXT("%s"), MyString);
+			\end{verbatim}
+			\item \textbf{AddOnScreenDebugMessage():} If you want to print a debug message directly to the screen you can use AddOnScreenDebugMessage() from GEngine. You can specify a key, displaying time and display color. A message overrides an older message with the same key. Usage example:
+			\begin{verbatim}
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, 
+				     FColor::Red, TEXT("5 second Message"));
+				//Use FString, if you want to print vars
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, 
+				     FColor::Red, 
+				     FString::Printf(TEXT("x: %f, y: %f"), x, y));
+			\end{verbatim}
+			\item \textbf{NewObject():} NewObject() creates a new UObject with the specific type. Objects created using NewObject() are not visible to the Editor, if you need that, use CreateDefaultSubObject() instead. Usage example:
+			\begin{verbatim}
+				auto RT = NewObject<UTextureRenderTarget2D>();
+			\end{verbatim}
+			\item \textbf{CreateDefaultSubobject():} This function creates a new named UObject with the specific type in the context of the current actor. Created objects are visible to the Editor, but this function can only be used in constructor. Usage example:
+			\begin{verbatim}
+				auto Mesh = CreateDefaultSubobject
+				    <UStaticMeshComponent>(FName("Mesh"));
+			\end{verbatim}
+			\item \textbf{LoadObject():} This function loads an objects from a specific asset. Usage example:
+			\begin{verbatim}
+				auto Mesh = LoadObject<UStaticMesh>(nullptr,
+				    TEXT("StaticMesh'/Asset/Path/Mesh.Mesh'");
+			\end{verbatim}
+			\item \textbf{Cast():} Casts an object to the given type. Returns nullptr if the object is not castable to this type. The object that should be casted, must be based on UObject, to work properly.
+			Usage example:
+			\begin{verbatim}
+				AActor* Actor = Cast<AActor>(Other);
+				if(Actor != nullptr) {
+				/* do something */ }
+			\end{verbatim}
+	\end{itemize}
+	
+	
+	\doclicenseImage
+\end{multicols*}
+
+\end{document}
