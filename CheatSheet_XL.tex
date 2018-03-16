@@ -11,6 +11,7 @@ modifier={by-nc-sa},
 version={4.0},]{doclicense}
 \usepackage[left=0.5cm,right=0.5cm,top=1cm,bottom=1.5cm]{geometry}
 
+
 \begin{document}
 \begin{multicols*}{2}
 	
@@ -170,7 +171,7 @@ version={4.0},]{doclicense}
 		& Hides the clear and browse button in the editor for this property. \\
 		\hline \textbf{EditCondition (Meta)}
 		&  The property can only be edited in Editor if the specified bool Property is true. Use ! to invert logic (so you can only edit property if bool is false). \\
-		\hline \textbf{BitMask (meta)}
+		\hline \textbf{BitMask (mMeta)}
 		& Change the value of this property in the Editor using a BitMask, which means you can select the value of each single bits. Use BitMask to specify a Enum, which entries will be used to name each bit. \\
 		\hline \textbf{ClampMax / ClampMin (Meta)}
 		& Use this on float or int property, to specify a maximum/minimum, that can be entered for this property in the Editor \\
@@ -215,13 +216,14 @@ version={4.0},]{doclicense}
 	
 	\section{Useful Console commands}
 	\begin{itemize}
-		\item \textbf{ShowCollision:} Show collision components in game.
+		\item \textbf{Show Collision:} Show collision components in game.
 		\item \textbf{ToggleDebugCamera:} Switch to a separate camera, which you can move in world freely and shows some additional debug infos.
 		\item \textbf{HighResShot [number]:} Makes a screen shot with [number] times your normal screen resolution. Instead of [number] you can provide a resolution the screenshot should have.
 		\item \textbf{[CVar] ?:} Add a ? after a CVar name and a description about the CVar will be shown.
 		\item \textbf{DumpConsoleCommands:} Prints a list of all available console commands and CVars.
-		\item \textbf{slowmo [float]:} Slow down or speed up the game. slowmo 1.0 is default. slowmo 1.5 is faster than normal, slowmo 0.5 is slower.
+		\item \textbf{slomo [float]:} Slow down or speed up the game. slomo 1.0 is default. slomo 1.5 is faster than normal, slomo 0.5 is slower.
 		\item \textbf {open [mapname]:} Load and opens the map with the given name.
+		\item \textbf{help:} Opens a page in browser which, lists all console commands and variables with a description. Searching and filter for specific commands is possible.
 	\end{itemize}
 	
 \end{multicols*}
