@@ -13,6 +13,11 @@ The normal Version has 2 pages and lists some attributes for UPROPERTY, UCLASS a
 ### XL Version
 The "XL" Version (4 pages) has all content of the normal version and additional it lists attributes for UENUM, UPARAM and USTRUCT. Further more code examples, a list of some useful console commands, some important assertion functions and some infos about the Draw Debug functions.
 
+### Poster Version
+The content of the XL Version on a single DIN A2 poster.
+
+## Feedback
+
 If you has any improvements or ideas, feel free to send a pull request or send me a message.
 
 ## License
