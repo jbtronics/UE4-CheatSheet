@@ -22,7 +22,7 @@ version={4.0},]{doclicense}
 		\linebreak
 		\Large{(C) J. Böhmer, March 2018  \linebreak Licensed under CC BY-NC-SA 4.0}
 		\linebreak
-		\Large{Version 1.0}
+		\Large{Version 1.1}
 	\end{center}
 	
 	\section{Reflection System}
@@ -214,6 +214,36 @@ version={4.0},]{doclicense}
 			}	
 		\end{verbatim}
 	\end{minipage}
+
+	\subsection{Delegates}
+	Delegates allow to call variable functions via a type-safe way.
+	There are 3 big types of delegates:
+	\begin{itemize}
+		\item Single-cast Delegates, which can have a single function target, declared with \verb|DECLARE_DELEGATE_|
+		\item Multi-cast Delegates, which can have multiple function targets, declared with \verb|DECLARE_MULTICAST_DELEGATE_|
+		\item Dynamic Multicasts, which can be serialized, and functions can be found by name, declared with \verb|DECLARE_DYNAMIC_DELEGATE_| or \verb|DECLARE_DYNAMIC_MULTICAST_DELEGATE_|
+	\end{itemize}
+	All Delegate macros have the syntax: \linebreak \verb|_DELEGATE_<Num>Params(Name,Param1Type,Param2Type,...)|
+	or for functions with return value: \linebreak
+	\verb|DECLARE_DELEGATE_RetVal(RetValType, Name)|
+	
+	Code example:
+	
+	\begin{verbatim}
+	DECLARE_MULTICAST_DELEGATE(VoidDelegate)
+	DECLARE_DELEGATE_OneParam(IntParamDelegate, int32)
+	DECLARE_DELEGATE_TwoParams(MyDelegate, int32, AActor*)
+	DECLARE_DELEGATE_RetVal_OneParam(int, Delegate2, uint8)
+	void MyFunc;
+	void MyFunc2(int32);
+	VoidDelegate Del1;
+	//Somewhere in func body
+	Del1.Add(this, FName("MyFunc")); //Add MyFunc
+	Del1.Broadcast(); //Call all bound functions
+	IntParamDelegate Del2;
+	Del2.Add(this, FName("MyFunc2)); //Bind MyFunc2
+	Del2.ExecuteIfBound(10); //Call MyFunc2
+	\end{verbatim}
 	
 	\section{Useful Console commands}
 	\begin{itemize}
@@ -361,15 +391,13 @@ version={4.0},]{doclicense}
 				    case EEnum:Val1:
 				        return 1;
 				    default:
-				        checkNoEntry();
-				}
+				        checkNoEntry(); }
 			\end{verbatim}
 		\item \textbf{unimplemented():} Use this assertions, on functions that are yet unimplemented or must be overridden to work properly.
 			\begin{verbatim}
 				void Function() {
 				    //This func must be overriden to work
-				    unimplemented();   
-				}
+				    unimplemented();   }
 			\end{verbatim}
 	\end{itemize}
 
@@ -384,8 +412,7 @@ version={4.0},]{doclicense}
 		   20,  //size of the point
 		   FColor(255,0,0),  //the color
 		   false, //Not persistant
-		   10.f //10s lifetime
-		);
+		   10.f //10s lifetime);
 		\end{verbatim}
 		\item \textbf{DrawDebugLine():} Draw a line between to points in  the world:
 		\begin{verbatim}
@@ -397,8 +424,7 @@ version={4.0},]{doclicense}
 			   false, //Not persistant
 			   -1, //Infinite lifetime
 			   0,
-			   10 //Line Thickness
-			);
+			   10 //Line Thickness);
 		\end{verbatim}
 		
 	\end{itemize}
