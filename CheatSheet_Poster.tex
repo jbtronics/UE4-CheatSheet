@@ -101,7 +101,7 @@ version={4.0},]{doclicense}
 	\subsection{UPARAM()}
 	\begin{tabularx}{\columnwidth}{|l|X|}
 			\hline \textbf{ref}
-			& By default, when you pass an reference to a Blueprint callable function, it will appear as an output node in the Editor. Use this attribute, to mark it as an input.\\
+			& By default, when you pass a reference to a Blueprint callable function, it will appear as an output node in the Editor. Use this attribute, to mark it as an input.\\
 			\hline \textbf{DisplayName}
 			& Use this name to override the name under which the parameter appears in the Blueprint Editor \\
 			\hline
@@ -119,7 +119,7 @@ version={4.0},]{doclicense}
 	\subsection{UCLASS()}
 	\begin{tabularx}{\columnwidth}{|l|X|}
 		\hline \textbf{Abstract}
-		& An class that is marked as abstract can not be placed or instanced during runtime. This is especially useful for classes, that does not provide functionality on their own and must be inherited and modified for meaningful usage.\\
+		& A class that is marked as abstract can not be placed or instanced during runtime. This is especially useful for classes, that does not provide functionality on their own and must be inherited and modified for meaningful usage.\\
 		\hline \textbf{Blueprintable}
 		& Classes marked with this attribute can be used as a base class for creating Blueprints. On Default this is deactivated. The attribute is inherited by child classes, use NotBlueprintable on childs to disable this. \\
 		\hline \textbf{BlueprintType}
@@ -345,7 +345,7 @@ version={4.0},]{doclicense}
 				auto Mesh = CreateDefaultSubobject
 				    <UStaticMeshComponent>(FName("Mesh"));
 			\end{verbatim}
-			\item \textbf{LoadObject():} This function loads an objects from a specific asset. Usage example:
+			\item \textbf{LoadObject():} This function loads an object from a specific asset. Usage example:
 			\begin{verbatim}
 				auto Mesh = LoadObject<UStaticMesh>(nullptr,
 				    TEXT("StaticMesh'/Asset/Path/Mesh.Mesh'");
