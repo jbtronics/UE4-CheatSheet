@@ -101,7 +101,7 @@ version={4.0},]{doclicense}
 	\subsection{UPARAM()}
 	\begin{tabularx}{\columnwidth}{|l|X|}
 			\hline \textbf{ref}
-			& By default, when you pass an reference to a Blueprint callable function, it will appear as an output node in the Editor. Use this attribute, to mark it as an input.\\
+			& By default, when you pass a reference to a Blueprint callable function, it will appear as an output node in the Editor. Use this attribute, to mark it as an input.\\
 			\hline \textbf{DisplayName}
 			& Use this name to override the name under which the parameter appears in the Blueprint Editor \\
 			\hline
@@ -119,13 +119,13 @@ version={4.0},]{doclicense}
 	\subsection{UCLASS()}
 	\begin{tabularx}{\columnwidth}{|l|X|}
 		\hline \textbf{Abstract}
-		& An class that is marked as abstract can not be placed or instanced during runtime. This is especially useful for classes, that does not provide functionality on their own and must be inherited and modified for meaningful usage.\\
+		& A class that is marked as abstract can not be placed or instanced during runtime. This is especially useful for classes, that does not provide functionality on their own and must be inherited and modified for meaningful usage.\\
 		\hline \textbf{Blueprintable}
 		& Classes marked with this attribute can be used as a base class for creating Blueprints. On Default this is deactivated. The attribute is inherited by child classes, use NotBlueprintable on childs to disable this. \\
 		\hline \textbf{BlueprintType}
 		& Classes with this attribute can be used as variable type in Blueprints. \\
 		\hline \textbf{Placeable}
-		& Classes marked as Placable, can be created and placed in a level, UI Scene or Blueprint via the Editor. The flag is inherited by all child classes, use NotPlacable on child to disable this. \\
+		& Classes marked as Placeable, can be created and placed in a level, UI Scene or Blueprint via the Editor. The flag is inherited by all child classes, use NotPlaceable on child to disable this. \\
 		\hline
 	\end{tabularx}
 	
@@ -263,7 +263,7 @@ version={4.0},]{doclicense}
 	
 	\begin{itemize}
 		\item \textbf{UObject:} The base class, all classes, that should be used within C++ must extend. The name of child classes should start with U (e.g. UMyNewClass).
-		\item \textbf{AActor:} Actor is the base class for all objects, that can be placed in a level. An Actor can has various Components. Child classes should start with A (e.g AMyNewActor).
+		\item \textbf{AActor:} Actor is the base class for all objects, that can be placed in a level. An Actor can have various Components. Child classes should start with A (e.g AMyNewActor).
 		\item \textbf{APawn:} The base class, for all actors, that should be controled by players or AI.
 		\item \textbf{ACharacter:} Characters are Pawn, which has a mesh collision and movement logic. They represent physical characters in the game world and can use CharacterMovementComponent for walking, flying, jumping and swiming logic.
 		\item \textbf{UActorComponent:} The base class for all actor components. Components defines some reusable behavior, that can be added to different actors.
@@ -345,7 +345,7 @@ version={4.0},]{doclicense}
 				auto Mesh = CreateDefaultSubobject
 				    <UStaticMeshComponent>(FName("Mesh"));
 			\end{verbatim}
-			\item \textbf{LoadObject():} This function loads an objects from a specific asset. Usage example:
+			\item \textbf{LoadObject():} This function loads an object from a specific asset. Usage example:
 			\begin{verbatim}
 				auto Mesh = LoadObject<UStaticMesh>(nullptr,
 				    TEXT("StaticMesh'/Asset/Path/Mesh.Mesh'");
